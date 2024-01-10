@@ -1,6 +1,9 @@
+//added new requirement for shape data
 const fs = require('fs');
 const inquirer = require('inquirer');
+const {Triangle, Circle, Square} = require('./lib/shapes');
 
+//template literal for user input
 const questions = [
     {
         type: 'input',
@@ -18,7 +21,7 @@ const questions = [
         type: 'input',
         message: 'What kind of shape do you want this text to be in?',
         name: 'type',
-        default: 'Circle, triangle, or square',
+        choices: 'Circle, triangle, or square',
     },
     {
         type: 'input',
@@ -28,20 +31,22 @@ const questions = [
     },
 ]
 
-function generateLogo(data) {
-
-    const logodata =
-
-    <svg version="1.1" width="300" height="200" xmlns="http://www.w3.org/2000/svg">
-
-    <circle cx="150" cy="100" r="80" fill="${data.color}" />
-  
-    <text x="150" y="125" font-size="60" text-anchor="middle" fill="${data.font}">${data.text}</text>
-  
-    </svg>
-    
+function renderLogo(data) {
+    return Circle
 }
 
+//write to file
+function writeToFile(fileName, data) {
+    const logoCriteria = renderLogo(data);
+
+    if(!fs.existsSync('./output')) {
+        fs.mkdirSync('./output');
+    }
+
+    fs.writeFileSync('logo.svg', logoCriteria);
+}
+
+//app initializer
 function init() {
     console.log('Init function called!');
    inquirer.prompt(questions).then((answers) => {
