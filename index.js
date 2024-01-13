@@ -15,13 +15,13 @@ const questions = [
         type: 'input',
         message: 'What color do you want this text to be?',
         name: 'font',
-        default: 'Enter up to 3 characters',
+        default: 'Enter a color name, like "Red", or a hexadecimal number, like "#ff0000".',
     },
     {
-        type: 'input',
+        type: 'list',
         message: 'What kind of shape do you want this text to be in?',
         name: 'type',
-        choices: 'Circle, triangle, or square',
+        choices: ['Circle', 'Triangle', 'Square'],
     },
     {
         type: 'input',
@@ -32,7 +32,28 @@ const questions = [
 ]
 
 function renderLogo(data) {
-    return Circle
+    const { type, color, text, font } = data;
+
+    // Dynamically create an instance of the selected shape
+    let selectedShape;
+    switch (type) {
+        case 'Circle':
+            selectedShape = new Circle();
+            break;
+        case 'Triangle':
+            selectedShape = new Triangle();
+            break;
+        case 'Square':
+            selectedShape = new Square();
+            break;
+    }
+
+    selectedShape.setColor(color);
+
+    const shapeSvg = selectedShape.render();
+    const logoSvg = `<svg>${shapeSvg}<text x="50%" y="50%" fill="${font}">${text}</text></svg>`;
+
+    return logoSvg;
 }
 
 //write to file
@@ -43,14 +64,14 @@ function writeToFile(fileName, data) {
         fs.mkdirSync('./output');
     }
 
-    fs.writeFileSync('logo.svg', logoCriteria);
+    fs.writeFileSync(`./output/${fileName}`, logoCriteria);
 }
 
 //app initializer
 function init() {
     console.log('Init function called!');
    inquirer.prompt(questions).then((answers) => {
-     writeToFile('testing.js', answers);
+     writeToFile('logo.svg', answers);
    });
   }
 
