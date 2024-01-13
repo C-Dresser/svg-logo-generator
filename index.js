@@ -31,10 +31,11 @@ const questions = [
     },
 ]
 
+//built out renderLogo function
+//updated functoin for proper nesting to write the svg data correctly
 function renderLogo(data) {
     const { type, color, text, font } = data;
 
-    // Dynamically create an instance of the selected shape
     let selectedShape;
     switch (type) {
         case 'Circle':
@@ -48,14 +49,17 @@ function renderLogo(data) {
             break;
     }
 
-    selectedShape.setColor(color);
+    selectedShape.setColor(color, font);
 
     const shapeSvg = selectedShape.render();
-    const logoSvg = `<svg>${shapeSvg}<text x="50%" y="50%" fill="${font}">${text}</text></svg>`;
+    
+    const logoSvg = `<svg width="200" height="200">${shapeSvg}<text x="50%" y="50%" text-anchor="middle" fill="${font}">${text}</text></svg>`;
 
     return logoSvg;
 }
 
+
+//edited path in writeToFile function
 //write to file
 function writeToFile(fileName, data) {
     const logoCriteria = renderLogo(data);
@@ -67,6 +71,7 @@ function writeToFile(fileName, data) {
     fs.writeFileSync(`./output/${fileName}`, logoCriteria);
 }
 
+//changed file name in init
 //app initializer
 function init() {
     console.log('Init function called!');
